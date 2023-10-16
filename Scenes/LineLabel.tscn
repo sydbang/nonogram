@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://cofja8memdw0x"]
+
+[ext_resource type="FontFile" uid="uid://dwusstyl4cqnn" path="res://Res/Fonts/Early GameBoy.ttf" id="1_kf67c"]
+
+[node name="Label" type="Label"]
+offset_right = 135.0
+offset_bottom = 46.0
+theme_override_fonts/font = ExtResource("1_kf67c")
+text = "Hello World 123"
+horizontal_alignment = 1
+vertical_alignment = 1
