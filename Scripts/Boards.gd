@@ -1,6 +1,8 @@
 extends Node2D
 
 var boardTileMap : TileMap
+var labelRows: Control
+var labelCols: Control
 var labelInstance: PackedScene = load("res://Scenes/LineLabel.tscn")
 
 var boardSize : Vector2 = Vector2(10, 10)
@@ -21,6 +23,8 @@ var map: Array = [
 	
 func _ready():
 	boardTileMap = $BoardTileMap
+	labelCols = $LabelCols
+	labelRows = $LabelRows
 	generate_board()
 	
 
@@ -35,8 +39,18 @@ func generate_board():
 	
 func printRowData():
 	for y in range(int(boardSize.y)):
+		var printText = ""
+		var l = labelInstance.instantiate()
 		for chain in HValues[y]:
-			print(chain)
+			printText += str(chain) + " "
+		l.text = printText
+		var lRectMinPosition = l.position
+		lRectMinPosition.y = y * 34
+		l.position.y = lRectMinPosition.y
+		labelRows.add_child(l)
+	labelRows.position.x = boardTileMap.position.x - 30
+	labelRows.position.y = boardTileMap.position.y
+
 	
 func getRowData():
 	var chain = 0
@@ -57,7 +71,7 @@ func getRowData():
 			#print("y: ", y, " = ", chain)
 			chain = 0
 		
-	print("Hvalues, ", HValues)
+	#print("Hvalues, ", HValues)
 	
 func getColData():
 	var chain = 0
@@ -75,4 +89,4 @@ func getColData():
 			VValues[x].append(chain)
 			#print("x: ", x, " = ", chain)
 			chain = 0
-	print("Vvalues, ", VValues)
+	#print("Vvalues, ", VValues)
