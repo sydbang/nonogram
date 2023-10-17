@@ -1,5 +1,7 @@
 extends Node2D
 
+var CaseSize = 34
+
 var boardTileMap : TileMap
 var labelRows: Control
 var labelCols: Control
@@ -14,7 +16,7 @@ var map: Array = [
 	[1, 0, 1, 0, 1, 0, 1, 1, 0, 1],
 	[0, 0, 1, 1, 0, 0, 1, 1, 1, 0],
 	[1, 0, 0, 1, 1, 0, 1, 0, 0, 1],
-	[0, 0, 1, 0, 1, 0, 1, 0, 0, 1],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 1, 1, 0, 0, 1, 1, 0, 1],
 	[0, 1, 1, 0, 0, 0, 1, 0, 0, 0],
 	[1, 0, 0, 1, 1, 0, 1, 1, 1, 1],
@@ -32,24 +34,55 @@ func generate_board():
 	for x in range(int(boardSize.x)):
 		for y in range(int(boardSize.y)):
 			boardTileMap.set_cell(0, Vector2i(x, y), map[y][x], Vector2i(0, 0), 0)
+	
+	setBoardPosition()
+	
 	getRowData()
 	getColData()
 	
 	printRowData()
+	printColData()
 	
+func setBoardPosition():
+	var rect = boardTileMap.get_used_rect()
+	var position = boardTileMap.position
+	var center = get_viewport().get_visible_rect().size / 2
+	var endpoint = Vector2(rect.end)
+	position = center - ((endpoint / 2) * (CaseSize))
+	boardTileMap.position = position 
+	
+
 func printRowData():
 	for y in range(int(boardSize.y)):
 		var printText = ""
 		var l = labelInstance.instantiate()
 		for chain in HValues[y]:
 			printText += str(chain) + " "
+		if printText.length() == 0 :
+			printText = "0 "
 		l.text = printText
 		var lRectMinPosition = l.position
-		lRectMinPosition.y = y * 34
+		lRectMinPosition.y = (y - 1) * CaseSize
 		l.position.y = lRectMinPosition.y
 		labelRows.add_child(l)
 	labelRows.position.x = boardTileMap.position.x - 30
 	labelRows.position.y = boardTileMap.position.y
+
+func printColData():
+	for x in range(int(boardSize.x)):
+		var printText = ""
+		var l = labelInstance.instantiate()
+		for chain in VValues[x]:
+			printText += str(chain) + "\n"
+		if printText.length() == 0 :
+			printText = "0\n"
+		l.text = printText
+		var lRectPosition = l.position
+		lRectPosition.x = (x - 1) * CaseSize
+		l.position = lRectPosition
+		labelCols.add_child(l)
+	labelCols.position.x = boardTileMap.position.x
+	labelCols.position.y = boardTileMap.position.y - 40
 
 	
 func getRowData():
