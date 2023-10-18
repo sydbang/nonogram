@@ -42,6 +42,7 @@ func generate_board():
 	
 	printRowData()
 	printColData()
+	centerBoard()
 	
 func setBoardPosition():
 	var rect = boardTileMap.get_used_rect()
@@ -51,7 +52,26 @@ func setBoardPosition():
 	position = center - ((endpoint / 2) * (CaseSize))
 	boardTileMap.position = position 
 	
+func centerBoard():
+	var hSize = 0
+	var vSize = 0
+	var rect = boardTileMap.get_used_rect().size 
 
+	for child in $LabelRows.get_children():
+		var childRectSize = child.size
+		if childRectSize.x > hSize:
+			hSize = childRectSize.x
+			
+	hSize = (hSize * 2) + (rect.x * 2 * CaseSize)
+	print(hSize)
+	for child in $LabelCols.get_children():
+		var childRectSize = child.size
+		if childRectSize.y > vSize:
+			vSize = childRectSize.y
+
+	vSize = (vSize * 2) + (rect.y*2*CaseSize)
+	print(vSize)
+	
 func printRowData():
 	for y in range(int(boardSize.y)):
 		var printText = ""
